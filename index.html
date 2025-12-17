@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Glitches RPG</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0000FF; /* Electric blue */
+            color: white;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); /* Placeholder for game character image */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 255, 0.5); /* Overlay for electric blue */
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="content">
+            <h1>Forum Glitches RPG</h1>
+            <div class="buttons">
+                <button onclick="window.location.href='create.html'">Créer un Chat sur les Glitches</button>
+                <button onclick="window.location.href='list.html'">Voir la Liste des Chats</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Dynamic image change (simple example)
+        const images = [
+            'https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+        ];
+        let currentImageIndex = 0;
+        setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            document.querySelector('.hero').style.backgroundImage = `url('${images[currentImageIndex]}')`;
+        }, 5000); // Change every 5 seconds
+    </script>
+</body>
+</html>

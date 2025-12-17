@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Chats</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #0000FF;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 255, 0.5);
+            z-index: -1;
+        }
+        #search {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+        .chat-list {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .chat-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chat-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .chat-item h3 {
+            margin: 0 0 5px 0;
+        }
+        .chat-item p {
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .home-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
+    <h1>Liste des Chats sur les Glitches</h1>
+    <input type="text" id="search" placeholder="Rechercher par titre ou jeu...">
+    <div class="chat-list" id="chatList"></div>
+    <script>
+        function loadChats() {
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const filteredChats = chats.filter(chat =>
+                chat.title.toLowerCase().includes(searchTerm) ||
+                chat.game.toLowerCase().includes(searchTerm)
+            );
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = '';
+            filteredChats.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item';
+                chatItem.onclick = () => window.location.href = `view.html?id=${chat.id}`;
+                chatItem.innerHTML = `
+                    <h3>${chat.title}</h3>
+                    <p>Jeu: ${chat.game}</p>
+                    <p>Messages: ${chat.messages.length}</p>
+                `;
+                chatList.appendChild(chatItem);
+            });
+        }
+
+        document.getElementById('search').addEventListener('input', loadChats);
+        loadChats();
+
+        // Dynamic background change
+        const images = [
+            'https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1586182987320-4f376d39d787?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+        ];
+        let currentImageIndex = 0;
+        setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+        }, 5000);
+    </script>
+</body>
+</html>

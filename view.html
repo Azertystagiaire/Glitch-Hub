@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voir le Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #0000FF;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 255, 0.5);
+            z-index: -1;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .message {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .message strong {
+            color: #FF4500;
+        }
+        .message small {
+            color: #CCCCCC;
+        }
+        form {
+            margin-top: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FF6347;
+        }
+        .back-button, .home-button {
+            margin-bottom: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <button class="back-button" onclick="window.location.href='list.html'">Retour à la Liste</button>
+        <button class="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
+        <h1 id="chatTitle"></h1>
+        <p id="chatGame"></p>
+        <div id="messages"></div>
+        <form id="addMessageForm">
+            <textarea id="newMessage" rows="3" placeholder="Ajouter un message..." required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+    <script>
+        const gameImages = {
+            "The Witcher": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "Horizon Zero Dawn": "https://images.unsplash.com/photo-1586182987320-4f376d39d787?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "The Legend of Zelda": "https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "Zelda a link to the past": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "Final Fantasy": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "Cyberpunk 2077": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+            "default": "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const chatId = parseInt(urlParams.get('id'));
+
+        function loadChat() {
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const chat = chats.find(c => c.id === chatId);
+            if (!chat) {
+                document.body.innerHTML = '<p>Chat non trouvé.</p>';
+                return;
+            }
+            document.getElementById('chatTitle').textContent = chat.title;
+            document.getElementById('chatGame').textContent = `Jeu: ${chat.game}`;
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = '';
+            chat.messages.forEach(msg => {
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message';
+                msgDiv.innerHTML = `
+                    <strong>${msg.author}</strong>: ${msg.text}
+                    <br><small>${new Date(msg.date).toLocaleString()}</small>
+                `;
+                messagesDiv.appendChild(msgDiv);
+            });
+
+            // Set background image based on game
+            let gameImage = gameImages[chat.game] || gameImages['default'];
+            if (chat.title === "test") {
+                gameImage = "https://www.puissance-zelda.com/img/jeux/alttp/inventaire/01-lanterne-map.png";
+            }
+            document.body.style.backgroundImage = `url('${gameImage}')`;
+        }
+
+        document.getElementById('addMessageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newMessageText = document.getElementById('newMessage').value;
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const chat = chats.find(c => c.id === chatId);
+            if (chat) {
+                chat.messages.push({
+                    author: 'Utilisateur',
+                    text: newMessageText,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('chats', JSON.stringify(chats));
+                document.getElementById('newMessage').value = '';
+                loadChat();
+            }
+        });
+
+        loadChat();
+    </script>
+</body>
+</html>

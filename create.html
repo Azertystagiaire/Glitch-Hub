@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #0000FF; /* Electric blue */
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 255, 0.5); /* Overlay for electric blue */
+            z-index: -1;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FF6347;
+        }
+        .home-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button class="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
+    <h1>Créer un Nouveau Chat sur les Glitches</h1>
+    <form id="createChatForm">
+        <label for="game">Nom du Jeu Vidéo:</label>
+        <input type="text" id="game" required>
+
+        <label for="title">Titre du Chat:</label>
+        <input type="text" id="title" required>
+
+        <label for="message">Message Initial:</label>
+        <textarea id="message" rows="5" required></textarea>
+
+        <button type="submit">Créer le Chat</button>
+    </form>
+    <script>
+        document.getElementById('createChatForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const game = document.getElementById('game').value;
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+
+            const chats = JSON.parse(localStorage.getItem('chats')) || [];
+            const newChat = {
+                id: Date.now(),
+                game: game,
+                title: title,
+                messages: [{
+                    author: 'Créateur',
+                    text: message,
+                    date: new Date().toISOString()
+                }]
+            };
+            chats.push(newChat);
+            localStorage.setItem('chats', JSON.stringify(chats));
+
+            alert('Chat créé avec succès!');
+            window.location.href = 'list.html';
+        });
+
+        // Dynamic background change
+        const images = [
+            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1586182987320-4f376d39d787?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
+            'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+        ];
+        let currentImageIndex = 0;
+        setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+        }, 5000);
+    </script>
+</body>
+</html>
