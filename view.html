@@ -12,8 +12,6 @@
             color: white;
             font-family: Arial, sans-serif;
             min-height: 100vh;
-            background-image: url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
@@ -70,15 +68,26 @@
         .back-button, .home-button {
             margin-bottom: 20px;
             margin-right: 10px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        .back-button:hover, .home-button:hover {
+            background-color: #FF6347;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
+       
         <button class="back-button" onclick="window.location.href='list.html'">Retour à la Liste</button>
         <button class="home-button" onclick="window.location.href='index.html'">Retour à l'Accueil</button>
         <h1 id="chatTitle"></h1>
         <p id="chatGame"></p>
+        <p>Créé par: <span id="chatCreator"></span></p>
         <div id="messages"></div>
         <form id="addMessageForm">
             <textarea id="newMessage" rows="3" placeholder="Ajouter un message..." required></textarea>
@@ -86,16 +95,6 @@
         </form>
     </div>
     <script>
-        const gameImages = {
-            "The Witcher": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "Horizon Zero Dawn": "https://images.unsplash.com/photo-1586182987320-4f376d39d787?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "The Legend of Zelda": "https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "Zelda a link to the past": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "Final Fantasy": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "Cyberpunk 2077": "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-            "default": "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-        };
-
         const urlParams = new URLSearchParams(window.location.search);
         const chatId = parseInt(urlParams.get('id'));
 
@@ -108,6 +107,7 @@
             }
             document.getElementById('chatTitle').textContent = chat.title;
             document.getElementById('chatGame').textContent = `Jeu: ${chat.game}`;
+            document.getElementById('chatCreator').textContent = chat.creator || 'Inconnu';
             const messagesDiv = document.getElementById('messages');
             messagesDiv.innerHTML = '';
             chat.messages.forEach(msg => {
@@ -119,13 +119,6 @@
                 `;
                 messagesDiv.appendChild(msgDiv);
             });
-
-            // Set background image based on game
-            let gameImage = gameImages[chat.game] || gameImages['default'];
-            if (chat.title === "test") {
-                gameImage = "https://www.puissance-zelda.com/img/jeux/alttp/inventaire/01-lanterne-map.png";
-            }
-            document.body.style.backgroundImage = `url('${gameImage}')`;
         }
 
         document.getElementById('addMessageForm').addEventListener('submit', function(e) {

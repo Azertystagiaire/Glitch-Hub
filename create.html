@@ -12,21 +12,12 @@
             color: white;
             font-family: Arial, sans-serif;
             min-height: 100vh;
-            background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            text-align: center;
+            background-image: url('https://i.redd.it/n6fybjav0ts11.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
         }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 255, 0.5); /* Overlay for electric blue */
-            z-index: -1;
-        }
+
         form {
             max-width: 600px;
             margin: 0 auto;
@@ -58,6 +49,21 @@
         }
         .home-button {
             margin-bottom: 20px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 20px;
+        }
+        .home-button:hover {
+            background-color: #FF6347;
+        }
+        h1 {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
         }
     </style>
 </head>
@@ -71,6 +77,9 @@
         <label for="title">Titre du Chat:</label>
         <input type="text" id="title" required>
 
+        <label for="creator">Nom du Créateur:</label>
+        <input type="text" id="creator" required>
+
         <label for="message">Message Initial:</label>
         <textarea id="message" rows="5" required></textarea>
 
@@ -81,6 +90,7 @@
             e.preventDefault();
             const game = document.getElementById('game').value;
             const title = document.getElementById('title').value;
+            const creator = document.getElementById('creator').value;
             const message = document.getElementById('message').value;
 
             const chats = JSON.parse(localStorage.getItem('chats')) || [];
@@ -88,8 +98,9 @@
                 id: Date.now(),
                 game: game,
                 title: title,
+                creator: creator,
                 messages: [{
-                    author: 'Créateur',
+                    author: creator,
                     text: message,
                     date: new Date().toISOString()
                 }]
@@ -100,18 +111,6 @@
             alert('Chat créé avec succès!');
             window.location.href = 'list.html';
         });
-
-        // Dynamic background change
-        const images = [
-            'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1586182987320-4f376d39d787?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-            'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
-        ];
-        let currentImageIndex = 0;
-        setInterval(() => {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            document.body.style.backgroundImage = `url('${images[currentImageIndex]}')`;
-        }, 5000);
     </script>
 </body>
 </html>
